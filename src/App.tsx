@@ -46,6 +46,15 @@ const ChapterAudioPlayer = ({ audioUrl, chapterId }: ChapterAudioPlayerProps) =>
   const [audioError, setAudioError] = useState(false);
   const audioRef = useRef<HTMLAudioElement | null>(null);
 
+  // Resolve the URL relative to the application's base path
+  const resolvedAudioUrl = useMemo(() => {
+    if (!audioUrl) return '';
+    if (audioUrl.startsWith('/')) {
+      return `${(import.meta as any).env.BASE_URL.replace(/\/$/, '')}${audioUrl}`;
+    }
+    return audioUrl;
+  }, [audioUrl]);
+
   const fileExtension = useMemo(() => {
     if (!audioUrl) return 'mp3';
     const parts = audioUrl.split('.');
@@ -146,11 +155,11 @@ const ChapterAudioPlayer = ({ audioUrl, chapterId }: ChapterAudioPlayerProps) =>
   return (
     <div className="bg-white/80 backdrop-blur-sm rounded-3xl p-5 md:p-6 border border-[#E9E4D9] shadow-sm mb-8 relative overflow-hidden transition-all duration-300 hover:shadow-md hover:border-[#81B29A]/40">
       {/* Decorative background visual */}
-      <div className="absolute right-0 top-0 bottom-0 w-24 bg-gradient-to-l from-[#81B29A]/5 to-transparent pointer-events-none rounded-r-3xl hidden md:block" />
+      <div className="absolute right-0 top-0 bottom-0 w-24 bg-linear-to-l from-[#81B29A]/5 to-transparent pointer-events-none rounded-r-3xl hidden md:block" />
 
       <audio 
         ref={audioRef}
-        src={audioUrl}
+        src={resolvedAudioUrl}
         onTimeUpdate={handleTimeUpdate}
         onLoadedMetadata={handleLoadedMetadata}
         onError={handleAudioError}
@@ -170,7 +179,7 @@ const ChapterAudioPlayer = ({ audioUrl, chapterId }: ChapterAudioPlayerProps) =>
           </div>
 
           <a 
-            href={audioUrl} 
+            href={resolvedAudioUrl} 
             download={`Overview_${chapterId.replace(/\s+/g, '_')}.${fileExtension}`}
             title="Download Audio File"
             className="flex items-center gap-2 px-4 py-2.5 bg-[#3D405B] text-white text-xs font-bold rounded-2xl hover:bg-[#E07A5F] active:bg-[#AF4B32] transition-colors duration-200 outline-none select-none shadow-sm cursor-pointer"
@@ -291,7 +300,7 @@ const InteractiveBulletItem = ({ item, searchQuery }: InteractiveBulletItemProps
 
   return (
     <li className="relative text-[#5C5F7F] text-[1rem] md:text-[1.125rem] font-medium ps-6 text-start">
-      <span className="absolute start-0 top-1.5 text-[#E07A5F] text-xl leading-none select-none">•</span>
+      <span className="absolute inset-s-0 top-1.5 text-[#E07A5F] text-xl leading-none select-none">•</span>
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-[#F4EFEB] pb-2 hover:border-[#E9E4D9] transition-colors duration-200">
         <span className="text-[#3D405B]">
           <Highlight text={item.text} highlight={searchQuery} />
