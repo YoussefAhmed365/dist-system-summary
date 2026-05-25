@@ -1,5 +1,3 @@
-import React from 'react';
-
 export type TopicItem = {
   text: string;
   subItems?: string[];
@@ -28,7 +26,7 @@ export const SYLLABUS: Chapter[] = [
   {
     id: 'Chapter 1',
     title: 'High-Performance Distributed Computing Systems (Types of Architectures)',
-    audioUrl: '/audio/chapter1.mp3',
+    audioUrl: '/audio/chapter1.m4a',
     topics: [
       {
         title: '1. Cluster Computing',
@@ -87,7 +85,7 @@ export const SYLLABUS: Chapter[] = [
   {
     id: 'Chapter 2',
     title: 'Architectures',
-    audioUrl: '/audio/chapter2.mp3',
+    audioUrl: '/audio/chapter2.m4a',
     topics: [
       {
         title: '1. Layered Architecture',
@@ -144,7 +142,7 @@ export const SYLLABUS: Chapter[] = [
   {
     id: 'Chapter 3',
     title: 'Logical Time & Global State',
-    audioUrl: '/audio/chapter3.mp3',
+    audioUrl: '/audio/chapter3.m4a',
     topics: [
       {
         title: 'Logical Time & The Relation Between Two Events',
@@ -206,7 +204,7 @@ export const SYLLABUS: Chapter[] = [
   {
     id: 'Chapter 4',
     title: 'RPC & Message Queuing System',
-    audioUrl: '/audio/chapter4.mp3',
+    audioUrl: '/audio/chapter4.m4a',
     topics: [
       {
         title: 'Remote Procedure Call (RPC)',
@@ -269,7 +267,7 @@ export const SYLLABUS: Chapter[] = [
   {
     id: 'Chapter 5',
     title: 'Algorithms for Shared Resources',
-    audioUrl: '/audio/chapter5.mp3',
+    audioUrl: '/audio/chapter5.m4a',
     topics: [
       {
         title: 'Algorithms for Shared Resources',
