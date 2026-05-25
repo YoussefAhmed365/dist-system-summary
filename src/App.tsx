@@ -759,7 +759,7 @@ export default function App() {
     try {
       const saved = localStorage.getItem('ds_study_guide_theme');
       if (saved) return saved === 'dark';
-      return window.matchMedia('(prefers-color-scheme: dark)').matches;
+      return false;
     } catch {
       return false;
     }
