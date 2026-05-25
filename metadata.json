@@ -1,0 +1,6 @@
+{
+  "name": "Distributed Systems Study Guide",
+  "description": "An interactive study guide for Distributed Systems with English headings and Arabic explanations.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
