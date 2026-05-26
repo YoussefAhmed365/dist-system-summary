@@ -188,20 +188,20 @@ ${PDF_CONTENT}`
                           }`}
                       >
                         {msg.role === 'user' ? (
-                          msg.text
+                          <div dir="auto" className="whitespace-pre-wrap">{msg.text}</div>
                         ) : (
-                          <div dir="rtl" className="space-y-2">
+                          <div dir="auto" className="space-y-2">
                             <ReactMarkdown
                               remarkPlugins={[remarkGfm]}
                               components={{
-                                p: ({node, ...props}) => <p className="mb-2 last:mb-0" {...props} />,
-                                ul: ({node, ...props}) => <ul className="list-disc list-outside ps-5 mb-2 space-y-1" {...props} />,
-                                ol: ({node, ...props}) => <ol className="list-decimal list-outside ps-5 mb-2 space-y-1" {...props} />,
-                                li: ({node, ...props}) => <li className="" {...props} />,
-                                a: ({node, ...props}) => <a className="text-[#E07A5F] underline" target="_blank" rel="noopener noreferrer" {...props} />,
-                                h1: ({node, ...props}) => <h1 className="text-xl font-bold mb-2 mt-4" {...props} />,
-                                h2: ({node, ...props}) => <h2 className="text-lg font-bold mb-2 mt-3" {...props} />,
-                                h3: ({node, ...props}) => <h3 className="text-md font-bold mb-2 mt-2" {...props} />,
+                                p: ({node, ...props}: any) => <p dir="auto" className="mb-2 last:mb-0" {...props} />,
+                                ul: ({node, ...props}: any) => <ul dir="auto" className="list-disc list-outside ps-5 mb-2 space-y-1" {...props} />,
+                                ol: ({node, ...props}: any) => <ol dir="auto" className="list-decimal list-outside ps-5 mb-2 space-y-1" {...props} />,
+                                li: ({node, ...props}: any) => <li dir="auto" className="" {...props} />,
+                                a: ({node, ...props}: any) => <a dir="auto" className="text-[#E07A5F] underline" target="_blank" rel="noopener noreferrer" {...props} />,
+                                h1: ({node, ...props}: any) => <h1 dir="auto" className="text-xl font-bold mb-2 mt-4" {...props} />,
+                                h2: ({node, ...props}: any) => <h2 dir="auto" className="text-lg font-bold mb-2 mt-3" {...props} />,
+                                h3: ({node, ...props}: any) => <h3 dir="auto" className="text-md font-bold mb-2 mt-2" {...props} />,
                                 code: ({node, inline, className, children, ...props}: any) => {
                                   return !inline ? (
                                     <pre className="bg-[#1e1e1e] text-white p-3 rounded-lg overflow-x-auto my-2 text-left" dir="ltr">
@@ -210,15 +210,15 @@ ${PDF_CONTENT}`
                                       </code>
                                     </pre>
                                   ) : (
-                                    <code className="bg-black/5 dark:bg-white/10 px-1.5 py-0.5 rounded text-[#E07A5F] font-mono text-[0.9em]" {...props}>
+                                    <code dir="auto" className="bg-black/5 dark:bg-white/10 px-1.5 py-0.5 rounded text-[#E07A5F] font-mono text-[0.9em]" {...props}>
                                       {children}
                                     </code>
                                   )
                                 },
-                                table: ({node, ...props}) => <div className="overflow-x-auto my-3"><table className="min-w-full divide-y divide-[#E0D8C3] dark:divide-[#2d3244] border border-[#E0D8C3] dark:border-[#2d3244] rounded" {...props} /></div>,
-                                th: ({node, ...props}) => <th className="px-3 py-2 bg-[#F9F7F2] dark:bg-[#151720] font-bold text-right" {...props} />,
-                                td: ({node, ...props}) => <td className="px-3 py-2 border-t border-[#E0D8C3] dark:border-[#2d3244]" {...props} />,
-                                blockquote: ({node, ...props}) => <blockquote className="border-r-4 border-[#81B29A] pr-3 my-2 text-[#5C5F7F] dark:text-[#94a3b8] italic" {...props} />
+                                table: ({node, ...props}: any) => <div dir="auto" className="overflow-x-auto my-3"><table className="min-w-full divide-y divide-[#E0D8C3] dark:divide-[#2d3244] border border-[#E0D8C3] dark:border-[#2d3244] rounded" {...props} /></div>,
+                                th: ({node, ...props}: any) => <th dir="auto" className="px-3 py-2 bg-[#F9F7F2] dark:bg-[#151720] font-bold text-start" {...props} />,
+                                td: ({node, ...props}: any) => <td dir="auto" className="px-3 py-2 border-t border-[#E0D8C3] dark:border-[#2d3244] text-start" {...props} />,
+                                blockquote: ({node, ...props}: any) => <blockquote dir="auto" className="border-s-4 border-[#81B29A] ps-3 my-2 text-[#5C5F7F] dark:text-[#94a3b8] italic" {...props} />
                               }}
                             >
                               {msg.text}
