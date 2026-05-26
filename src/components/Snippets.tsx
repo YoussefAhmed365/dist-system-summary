@@ -48,9 +48,9 @@ const actualServerProcess = {
   add: (a, b) => a + b
 };`;
 
-export function SnippetBlock({ id }: { id: string }) {
+export function SnippetBlock({ id }: { id: string; key?: React.key }) {
   const code = id === 'search-engine-app' ? searchEngineSnippet : id === 'rpc-code' ? rpcSnippet : '';
-  
+
   if (!code) return null;
 
   return (

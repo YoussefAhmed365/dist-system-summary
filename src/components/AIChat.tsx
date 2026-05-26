@@ -1,6 +1,8 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { MessageCircle, X, Send, Eraser, Key, Loader2, ExternalLink } from 'lucide-react';
 import { PDF_CONTENT } from '../pdfContent';
+import ReactMarkdown from 'react-markdown';
+import remarkGfm from 'remark-gfm';
 
 interface Message {
   role: 'user' | 'model';
@@ -16,7 +18,7 @@ export const AIChat = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [apiKey, setApiKey] = useState(() => localStorage.getItem('geminiApiKey') || '');
   const [apiKeyInput, setApiKeyInput] = useState('');
-  
+
   const [messages, setMessages] = useState<Message[]>(() => {
     try {
       const saved = localStorage.getItem('ds_ai_chat_history');
@@ -24,10 +26,10 @@ export const AIChat = () => {
         const parsed = JSON.parse(saved);
         if (parsed && parsed.length > 0) return parsed;
       }
-    } catch (e) {}
+    } catch (e) { }
     return [DEFAULT_WELCOME];
   });
-  
+
   const [input, setInput] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
@@ -74,12 +76,14 @@ export const AIChat = () => {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           systemInstruction: {
-            parts: [{ text: `أنت مساعد ذكي مصمم لمساعدة الطلاب في دراسة منهج النظم الموزعة (Distributed Systems).
+            parts: [{
+              text: `أنت مساعد ذكي مصمم لمساعدة الطلاب في دراسة منهج النظم الموزعة (Distributed Systems).
 استخدم المحتوى التالي المعطى من المنهج للإجابة على أسئلة الطلاب. إذا كان السؤال خارج سياق المنهج، اعتذر بلطف.
 يجب أن تكون إجاباتك دقيقة وواضحة وباللغة العربية ما لم يطلب الطالب غير ذلك.
 
 هذا هو محتوى المنهج:
-${PDF_CONTENT}` }]
+${PDF_CONTENT}`
+            }]
           },
           contents: newMessages.map(msg => ({
             role: msg.role === 'model' ? 'model' : 'user',
@@ -123,7 +127,7 @@ ${PDF_CONTENT}` }]
           <div className="bg-[#3D405B] text-white p-4 flex justify-between items-center rounded-t-xl shrink-0">
             <div className="flex items-center gap-2">
               <MessageCircle className="w-5 h-5 text-[#E07A5F]" />
-              <h3 className="font-bold tracking-wider">AI Tutor</h3>
+              <h3 className="font-bold tracking-wider">Distributed Systems AI</h3>
             </div>
             <div className="flex items-center gap-1">
               {apiKey && (
@@ -150,9 +154,9 @@ ${PDF_CONTENT}` }]
                 <p className="text-sm text-[#5C5F7F] dark:text-[#94a3b8] mb-4">
                   Please provide your Gemini API key to activate the AI Tutor. Your key is stored securely in your browser's local storage and is sent directly to Google.
                 </p>
-                <a 
-                  href="https://aistudio.google.com/u/1/api-keys" 
-                  target="_blank" 
+                <a
+                  href="https://aistudio.google.com/u/1/api-keys"
+                  target="_blank"
                   rel="noopener noreferrer"
                   className="inline-flex items-center gap-1.5 text-xs text-[#E07A5F] hover:text-[#E07A5F]/80 font-bold mb-6 transition-colors bg-[#E07A5F]/10 px-3 py-1.5 rounded-lg"
                 >
@@ -177,14 +181,50 @@ ${PDF_CONTENT}` }]
                 <div className="flex-1 overflow-y-auto p-4 space-y-4 custom-scrollbar" dir="rtl">
                   {messages.map((msg, idx) => (
                     <div key={idx} className={`flex ${msg.role === 'user' ? 'justify-start' : 'justify-end'}`}>
-                      <div 
-                        className={`max-w-[85%] p-3 rounded-2xl text-sm whitespace-pre-wrap leading-relaxed ${
-                          msg.role === 'user' 
-                          ? 'bg-[#E07A5F] text-white rounded-tr-sm' 
-                          : 'bg-white border border-[#E9E4D9] text-[#3D405B] rounded-tl-sm dark:bg-[#1a1d27] dark:border-[#2d3244] dark:text-[#e2e8f0]'
-                        }`}
+                      <div
+                        className={`max-w-[85%] p-3 rounded-2xl text-sm leading-relaxed ${msg.role === 'user'
+                            ? 'bg-[#E07A5F] text-white rounded-tr-sm whitespace-pre-wrap'
+                            : 'bg-white border border-[#E9E4D9] text-[#3D405B] rounded-tl-sm dark:bg-[#1a1d27] dark:border-[#2d3244] dark:text-[#e2e8f0] overflow-hidden'
+                          }`}
                       >
-                        {msg.text}
+                        {msg.role === 'user' ? (
+                          msg.text
+                        ) : (
+                          <div dir="rtl" className="space-y-2">
+                            <ReactMarkdown
+                              remarkPlugins={[remarkGfm]}
+                              components={{
+                                p: ({node, ...props}) => <p className="mb-2 last:mb-0" {...props} />,
+                                ul: ({node, ...props}) => <ul className="list-disc list-outside ps-5 mb-2 space-y-1" {...props} />,
+                                ol: ({node, ...props}) => <ol className="list-decimal list-outside ps-5 mb-2 space-y-1" {...props} />,
+                                li: ({node, ...props}) => <li className="" {...props} />,
+                                a: ({node, ...props}) => <a className="text-[#E07A5F] underline" target="_blank" rel="noopener noreferrer" {...props} />,
+                                h1: ({node, ...props}) => <h1 className="text-xl font-bold mb-2 mt-4" {...props} />,
+                                h2: ({node, ...props}) => <h2 className="text-lg font-bold mb-2 mt-3" {...props} />,
+                                h3: ({node, ...props}) => <h3 className="text-md font-bold mb-2 mt-2" {...props} />,
+                                code: ({node, inline, className, children, ...props}: any) => {
+                                  return !inline ? (
+                                    <pre className="bg-[#1e1e1e] text-white p-3 rounded-lg overflow-x-auto my-2 text-left" dir="ltr">
+                                      <code className={className} {...props}>
+                                        {children}
+                                      </code>
+                                    </pre>
+                                  ) : (
+                                    <code className="bg-black/5 dark:bg-white/10 px-1.5 py-0.5 rounded text-[#E07A5F] font-mono text-[0.9em]" {...props}>
+                                      {children}
+                                    </code>
+                                  )
+                                },
+                                table: ({node, ...props}) => <div className="overflow-x-auto my-3"><table className="min-w-full divide-y divide-[#E0D8C3] dark:divide-[#2d3244] border border-[#E0D8C3] dark:border-[#2d3244] rounded" {...props} /></div>,
+                                th: ({node, ...props}) => <th className="px-3 py-2 bg-[#F9F7F2] dark:bg-[#151720] font-bold text-right" {...props} />,
+                                td: ({node, ...props}) => <td className="px-3 py-2 border-t border-[#E0D8C3] dark:border-[#2d3244]" {...props} />,
+                                blockquote: ({node, ...props}) => <blockquote className="border-r-4 border-[#81B29A] pr-3 my-2 text-[#5C5F7F] dark:text-[#94a3b8] italic" {...props} />
+                              }}
+                            >
+                              {msg.text}
+                            </ReactMarkdown>
+                          </div>
+                        )}
                       </div>
                     </div>
                   ))}
@@ -197,13 +237,13 @@ ${PDF_CONTENT}` }]
                   )}
                   <div ref={messagesEndRef} />
                 </div>
-                
+
                 <div className="shrink-0 p-3 bg-white dark:bg-[#1a1d27] border-t border-[#E9E4D9] dark:border-[#2d3244]">
                   <form onSubmit={handleSendMessage} className="flex gap-2">
                     <input
                       type="text"
                       dir="rtl"
-                      placeholder="اسأل المعلم الذكي..."
+                      placeholder="اسأل AI..."
                       value={input}
                       onChange={(e) => setInput(e.target.value)}
                       className="flex-1 min-w-0 px-4 py-2 text-sm border border-[#E0D8C3] dark:border-[#2d3244] dark:bg-[#151720] dark:text-[#e2e8f0] rounded-xl focus:outline-none focus:border-[#E07A5F] transition-colors bg-[#F9F7F2]"
